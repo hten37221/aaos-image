@@ -1,0 +1,29 @@
+# Automotive MySystemApp AVD image v5
+
+Source archive: sdk-repo-linux-system-images-automotive-mysystemapp-v5.zip
+Source size: 6027775916 bytes
+Source SHA-256: ec06e9e8df8252b8fd668d10b3e7eaffe11a47391649e14ee3deee3b6231f6ae
+
+Compressed archive: sdk-repo-linux-system-images-automotive-mysystemapp-v5.7z
+Compression: 7-Zip LZMA2 solid archive
+Volumes: 8
+Volume size limit: 99614720 bytes (95 MiB)
+Maximum volume size: 99614720 bytes
+Final volume size: 85472120 bytes
+Archive size: 782775160 bytes
+Archive test: 7z t passed
+
+Build metadata:
+Product: sdk_car_mysystemapp_x86_64
+Build variant: userdebug
+Target device: emulator_car64_x86_64
+Android: 17 (Baklava), API 37
+Build ID: CP2A.260605.016
+Description: Latest My-System-App from branch ux-gui-audit-improvements (UX/UI audit improvements, 3D hotspots, card spacing/alignment, tab pending selection, Full-screen 1920x1080 display)
+
+Restore:
+1. Place all files named sdk-repo-linux-system-images-automotive-mysystemapp-v5.7z.001 through .008 in one directory.
+2. Run: 7z t sdk-repo-linux-system-images-automotive-mysystemapp-v5.7z.001
+3. Run: 7z x sdk-repo-linux-system-images-automotive-mysystemapp-v5.7z.001
+4. Verify the extracted ZIP with:
+   sha256sum sdk-repo-linux-system-images-automotive-mysystemapp-v5.zip

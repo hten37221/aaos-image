@@ -1,99 +1,97 @@
-HUONG DAN SU DUNG AOSP ANDROID AUTOMOTIVE SYSTEM IMAGE
-=====================================================
+HUONG DAN SU DUNG AOSP ANDROID AUTOMOTIVE SYSTEM IMAGE (MY-SYSTEM-APP V5)
+========================================================================
 
 Thong tin ban build
 -------------------
 - San pham: AOSP Android Automotive OS Emulator
-- Target: sdk_car_x86_64-userdebug
-- Android: 17 preview (Baklava)
+- Target: sdk_car_mysystemapp_x86_64-trunk_staging-userdebug
+- Android: 17 (Baklava)
 - API level: 37
-- SDK extension: 22
 - ABI: x86_64
 - Build ID: CP2A.260605.016
 - System image tag: android-automotive
 - Ten hien thi trong Android Studio: AOSP Automotive
-- Android Emulator toi thieu: 35.4.9
-- Ngay dong goi: 2026-07-21
+- Tich hop: My-System-App (Vehicle Control v3.0.0, branch ux-gui-audit-improvements)
+- Tinh nang he thong: Da fix CarSystemUI Display Compatibility & Safe Region (Full-screen 1920x1080)
+- Ngay dong goi: 2026-10-26
 
 Bo file phan phoi
 -----------------
-- AAOS_Baklava_Emulator.7z.001 ... .012: archive 7z chia thanh cac phan 90 MiB.
-- AAOS_Baklava_Emulator.volumes.sha256: checksum cua tung phan 7z.
-- sdk-repo-linux-system-images.zip.sha256: checksum cua ZIP sau khi khoi phuc.
+- sdk-repo-linux-system-images-automotive-mysystemapp-v5.7z.001 ... .008: archive 7z chia thanh cac phan <= 95 MiB (tong 747 MB).
+- sdk-repo-linux-system-images-automotive-mysystemapp-v5.volumes.sha256: checksum cua tung phan 7z.
+- sdk-repo-linux-system-images-automotive-mysystemapp-v5.zip.sha256: checksum cua ZIP sau khi khoi phuc.
+- sdk-repo-linux-system-images-automotive-mysystemapp-v5.manifest: chi tiet build metadata va kich thuoc volumes.
 
 Yeu cau
 -------
 - Cai 7-Zip tren Windows hoac goi 7z/p7zip tren Linux.
-- Android Studio co ho tro Android Baklava preview.
-- Android Emulator 35.4.9 tro len.
+- Android Studio hoac Android Emulator.
 - Can khoang 7 GB dung luong trong Android SDK sau khi giai nen.
 
 1. Kiem tra va khoi phuc ZIP tren Windows
 -----------------------------------------
-Dat tat ca cac file .7z.001 ... .7z.012 trong cung mot thu muc.
+Dat tat ca cac file .7z.001 ... .7z.008 trong cung mot thu muc.
 
 Kiem tra checksum tung volume bang PowerShell:
 
-  Get-Content .\AAOS_Baklava_Emulator.volumes.sha256 | ForEach-Object {
+  Get-Content .\sdk-repo-linux-system-images-automotive-mysystemapp-v5.volumes.sha256 | ForEach-Object {
       $parts = $_ -split '\s+', 2
       $actual = (Get-FileHash -Algorithm SHA256 $parts[1]).Hash.ToLower()
       if ($actual -ne $parts[0]) { throw "Checksum mismatch: $($parts[1])" }
   }
 
-Mo AAOS_Baklava_Emulator.7z.001 bang 7-Zip va chon Extract,
+Mo sdk-repo-linux-system-images-automotive-mysystemapp-v5.7z.001 bang 7-Zip va chon Extract,
 hoac dung command line:
 
-  7z x AAOS_Baklava_Emulator.7z.001
+  7z x sdk-repo-linux-system-images-automotive-mysystemapp-v5.7z.001
 
 Ket qua thu duoc:
 
-  sdk-repo-linux-system-images.zip
+  sdk-repo-linux-system-images-automotive-mysystemapp-v5.zip
 
-Kiem tra ZIP:
+Kiem tra SHA-256 cua ZIP:
 
-  certutil -hashfile sdk-repo-linux-system-images.zip SHA256
+  certutil -hashfile sdk-repo-linux-system-images-automotive-mysystemapp-v5.zip SHA256
 
 SHA-256 dung:
 
-  c5db4cd650b9a8c87c07595931a26d6809d5b841076b50bf86b15274fac69395
+  ec06e9e8df8252b8fd668d10b3e7eaffe11a47391649e14ee3deee3b6231f6ae
 
 2. Cai system-image vao Android SDK tren Windows
 -------------------------------------------------
 Dong Android Studio va tat tat ca emulator dang chay, sau do mo PowerShell:
 
   $Sdk = "$env:LOCALAPPDATA\Android\Sdk"
-  $Destination = "$Sdk\system-images\android-Baklava\android-automotive"
+  $Destination = "$Sdk\system-images\android-37\android-automotive"
   New-Item -ItemType Directory -Force -Path $Destination
-  Expand-Archive -Path ".\sdk-repo-linux-system-images.zip" `
+  Expand-Archive -Path ".\sdk-repo-linux-system-images-automotive-mysystemapp-v5.zip" `
       -DestinationPath $Destination -Force
 
 Cau truc sau khi cai phai la:
 
-  %LOCALAPPDATA%\Android\Sdk\system-images\android-Baklava\android-automotive\x86_64\source.properties
-  %LOCALAPPDATA%\Android\Sdk\system-images\android-Baklava\android-automotive\x86_64\system.img
-  %LOCALAPPDATA%\Android\Sdk\system-images\android-Baklava\android-automotive\x86_64\vendor.img
-  %LOCALAPPDATA%\Android\Sdk\system-images\android-Baklava\android-automotive\x86_64\ramdisk.img
+  %LOCALAPPDATA%\Android\Sdk\system-images\android-37\android-automotive\x86_64\source.properties
+  %LOCALAPPDATA%\Android\Sdk\system-images\android-37\android-automotive\x86_64\system.img
+  %LOCALAPPDATA%\Android\Sdk\system-images\android-37\android-automotive\x86_64\vendor.img
+  %LOCALAPPDATA%\Android\Sdk\system-images\android-37\android-automotive\x86_64\ramdisk.img
 
 Khoi dong lai Android Studio, mo Tools > Device Manager > Create Virtual Device,
 chon mot Automotive hardware profile va image "AOSP Automotive" x86_64.
 
 3. Cai tren Linux
 -----------------
-  sha256sum -c AAOS_Baklava_Emulator.volumes.sha256
-  7z x AAOS_Baklava_Emulator.7z.001
-  sha256sum -c sdk-repo-linux-system-images.zip.sha256
-  mkdir -p "$ANDROID_SDK_ROOT/system-images/android-Baklava/android-automotive"
-  unzip sdk-repo-linux-system-images.zip \
-      -d "$ANDROID_SDK_ROOT/system-images/android-Baklava/android-automotive"
+  sha256sum -c sdk-repo-linux-system-images-automotive-mysystemapp-v5.volumes.sha256
+  7z x sdk-repo-linux-system-images-automotive-mysystemapp-v5.7z.001
+  sha256sum -c sdk-repo-linux-system-images-automotive-mysystemapp-v5.zip.sha256
+  mkdir -p "$ANDROID_SDK_ROOT/system-images/android-37/android-automotive"
+  unzip sdk-repo-linux-system-images-automotive-mysystemapp-v5.zip \
+      -d "$ANDROID_SDK_ROOT/system-images/android-37/android-automotive"
 
-4. Cap nhat image trong tuong lai
----------------------------------
-- Dong Android Studio va emulator.
-- Giai nen bo image moi de ghi de thu muc x86_64 hien tai.
-- Mo Device Manager, chon Wipe Data va Cold Boot cho AVD cu.
-- Neu snapshot cu khong tuong thich, xoa AVD cu va tao lai.
+Hoac chay truc tiep bang script run_local_avd.sh:
+  setsid env ANDROID_SDK_ROOT="$HOME/Android/Sdk" WORKDIR="$HOME/.aaos-new-avd" \
+      AVD_IMAGE_DIR="/path/to/extracted/x86_64" ABI=x86_64 AVD_NAME=my_car_new_avd_x86_64 \
+      /path/to/run_local_avd.sh -gpu swiftshader_indirect -wipe-data -no-snapshot-load > ~/aaos_avd.log 2>&1 &
 
 Luu y
 -----
-Day la AOSP userdebug image, khong bao gom Google Play Store hoac Google APIs.
+Day la AOSP userdebug image da tich hop Vehicle Control v3.0.0.
 Khong doi ten rieng tung volume va khong duoc thieu bat ky volume nao khi giai nen.
